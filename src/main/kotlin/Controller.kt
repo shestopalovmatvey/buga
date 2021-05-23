@@ -1,3 +1,4 @@
+import javafx.animation.Animation
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -28,6 +29,9 @@ class Controller {
     @FXML
     lateinit var labelMove: Label
 
+    @FXML
+    lateinit var gameName: Label
+
     fun startGame() {
         if (button.text.equals("Начать игру")) {
             for (i in logic.list.indices) {
@@ -47,6 +51,7 @@ class Controller {
                 }
             }
             anchorPane.setOnMouseClicked { mouseClicked(it) }
+            gameName.opacity = 0.0
             labelPlayer.isVisible = true
             labelPlayer.text = "Сейчас ходят: Олени"
             labelMove.isVisible = true
@@ -99,6 +104,15 @@ class Controller {
         }
         labelPlayer.text = "Сейчас ходят: ${if (logic.player == 1) "Собаки" else "Олени"}"
         labelMove.text = "Собакам осталось выставить фишек: ${16 - logic.countBlack}"
+        labelMove.isVisible = true
+        if (logic.endGame() == 2) {
+            labelPlayer.text = "Победили Олени"
+            labelMove.isVisible = false
+        }
+        if (logic.endGame() == 1) {
+            labelPlayer.text = "Победили Собаки"
+            labelMove.isVisible = false
+        }
     }
 
 }

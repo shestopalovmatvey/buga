@@ -15,5 +15,6 @@ class Main : Application() {
         primaryStage?.title = "Buga-Shadara"
         primaryStage?.scene = scene
         primaryStage?.show()
+
     }
 }

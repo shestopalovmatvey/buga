@@ -4,8 +4,7 @@ class Logic() {
     var player = 2
     var countBlack = 0
     var countFelledChip = 0
-    var list = mutableListOf<MutableList<Int>>()
-        private set
+    val list = mutableListOf<MutableList<Int>>()
 
     init {
         for (i in 0..4) {
@@ -32,8 +31,8 @@ class Logic() {
         list[3][3] = 1
         list[3][4] = 1
         list[3][5] = 1
-
     }
+
 
     fun move(line: Int, column: Int, endLine: Int, endColumn: Int) {
         list[endLine][endColumn] = list[line][column]
@@ -55,7 +54,8 @@ class Logic() {
                 move(line, column, endLine, endColumn)
                 player = if (player == 2) 1 else 2
             }
-            if (abs(endLine - line) <= 2 && abs(endColumn - column) <= 2 && player == 2) {
+            if (abs(endLine - line) <= 2 && abs(endColumn - column) <= 2 && player == 2 &&
+                !((endLine + endColumn) % 2 == 1 && ((endLine != line) && (endColumn != column)))) {
                 val deltaLine = (endLine - line) / 2
                 val deltaColumn = (endColumn - column) / 2
                 if (list[line + deltaLine][column + deltaColumn] == 1) {
@@ -95,48 +95,22 @@ class Logic() {
     }
 
     private fun isBlocked(i: Int, j: Int): Boolean {
-        //проверка границ поля
-        //есть ли соседняя == 0
-        //есть ли через одну == 0
-        //между есть один
         for (k in i-2..i+2) {
             for (m in j-2..j+2) {
-                if (k in 0..4 && m in 0..8 && list[i][j] != -2) {
-                    TODO()
+                if (k in 0..4 && m in 0..8 && list[k][m] != -2 && !((i + j) % 2 == 1 && ((k != i) && (m != j))) && list[k][m] == 0) {
+                    if (abs(k - i) <= 1 && abs(m - j) <= 1 && list[k][m] == 0) {
+                        return false
+                    }
+                    if (abs(k - i) <= 2 && abs(m - j) <= 2 && !((k + m) % 2 == 1 && ((k != i) && (m != j)))) {
+                        val deltaLine = (k - i) / 2
+                        val deltaColumn = (m - j) / 2
+                        if (list[i + deltaLine][j + deltaColumn] == 1) {
+                            return false
+                        }
+                    }
                 }
             }
         }
         return true
     }
-
-
-//    fun canMove(line: Int, column: Int, endLine: Int, endColumn: Int): Boolean {
-//        if (list[line][column] == player && list[endLine][endColumn] == 0 &&
-//            !((line + column) % 2 == 1 && ((endLine != line) && (endColumn != column)))
-//        ) {
-//            if (abs(endLine - line) <= 1 && abs(endColumn - column) <= 1) {
-//                return true
-//            }
-//            if (abs(endLine - line) <= 2 && abs(endColumn - column) <= 2 && player == 2) {
-//                val deltaLine = (endLine - line) / 2
-//                val deltaColumn = (endColumn - column) / 2
-//                if (list[line + deltaLine][column + deltaColumn] == 1) {
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
-//
-//    fun canCut(line: Int, column: Int, endLine: Int, endColumn: Int): Boolean {
-//        if (abs(endLine - line) <= 2 && abs(endColumn - column) <= 2 && player == 2) {
-//            val deltaLine = (endLine - line) / 2
-//            val deltaColumn = (endColumn - column) / 2
-//            if (list[line + deltaLine][column + deltaColumn] == 1) {
-//                return true
-//            }
-//        }
-//    }
-
-
 }
